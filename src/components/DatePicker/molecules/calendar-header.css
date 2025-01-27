@@ -1,0 +1,24 @@
+/* Container for header navigation and title */
+.header-container {
+    @apply flex items-center justify-between mb-4;
+}
+
+/* Title for the current month and year */
+.month-title {
+    @apply text-lg font-semibold dark:text-white;
+}
+
+/* Icon styles for navigation buttons */
+.icon {
+    @apply w-5 h-5;
+}
+
+/* Container for weekday labels */
+.days-header {
+    @apply grid grid-cols-7 mb-2;
+}
+
+/* Weekday label styles */
+.day-label {
+    @apply text-center text-sm font-medium text-gray-500 py-2 dark:text-gray-400;
+}

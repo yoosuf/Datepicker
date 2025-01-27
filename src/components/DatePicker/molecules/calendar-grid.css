@@ -1,0 +1,5 @@
+/* Grid container for the calendar */
+.calendar-grid {
+    @apply grid grid-cols-7 gap-1;
+  }
+  

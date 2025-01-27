@@ -1,0 +1,34 @@
+/* Base styles for the day cell */
+.day-cell {
+    @apply h-10 w-10 rounded-xl flex items-center justify-center text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+
+/* Styles for current month dates */
+.current-month {
+    @apply hover:bg-gray-100 dark:hover:bg-gray-700;
+}
+
+/* Styles for non-current month dates */
+.non-current-month {
+    @apply text-gray-400 dark:text-gray-500;
+}
+
+/* Styles for selected dates */
+.selected {
+    @apply bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700;
+}
+
+/* Styles for today's date */
+.today {
+    @apply border border-blue-500 dark:border-blue-400;
+}
+
+/* Styles for disabled dates */
+.disabled {
+    @apply cursor-not-allowed text-gray-300 dark:text-gray-600 hover:bg-transparent;
+}
+
+/* Styles for enabled dates */
+.enabled {
+    @apply cursor-pointer;
+}

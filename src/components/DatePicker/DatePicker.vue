@@ -1,5 +1,5 @@
 <template>
-  <div class="relative" :class="{ 'dark': isDarkMode }">
+  <div class="relative" :class="{ dark: isDarkMode }">
     <DatePickerInput
       v-model="inputValue"
       :placeholder="placeholder"
@@ -9,8 +9,10 @@
       :date-format="dateFormat"
       :is-open="isOpen"
       :label="label"
+      :is-range="isRange"
       @toggle="toggleCalendar"
       @validate="validateInput"
+      @input="clearError"
       ref="inputRef"
     />
 
@@ -26,8 +28,10 @@
         v-if="isOpen"
         :current-date="currentDate"
         :selected-date="selectedDate"
+        :selected-range="selectedRange"
         :first-day-of-week="firstDayOfWeek"
         :disabled-dates="disabledDates"
+        :is-range="isRange"
         @select-date="handleDateSelection"
         @previous-month="handlePreviousMonth"
         @next-month="handleNextMonth"
@@ -39,43 +43,49 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
-import type { DateValue, DateFormat } from '../../types/datePicker'
-import { useDatePicker } from '../../composables/useDatePicker'
-import { formatDate } from '../../utils/dateUtils'
-import DatePickerInput from './DatePickerInput.vue'
-import DatePickerDropdown from './DatePickerDropdown.vue'
+import { ref, computed, onMounted, onUnmounted } from "vue";
+import type { DateValue, DateFormat, DateRange } from "../../types/datePicker";
+import { useDatePicker } from "../../composables/useDatePicker";
+import { formatDate } from "../../utils/dateUtils";
+import DatePickerInput from "./DatePickerInput.vue";
+import DatePickerDropdown from "./DatePickerDropdown.vue";
 
-const props = withDefaults(defineProps<{
-  modelValue: Date | null
-  placeholder?: string
-  dateFormat?: DateFormat
-  firstDayOfWeek?: 0 | 1
-  ariaLabel?: string
-  ariaDescribedby?: string
-  disabledDates: Date[]
-  class?: string
-  label?: string
-}>(), {
-  placeholder: 'Select date',
-  dateFormat: 'mm/dd/yyyy',
-  firstDayOfWeek: 0,
-  ariaLabel: 'Date picker',
-  ariaDescribedby: 'date-picker-description',
-  disabledDates: () => [],
-  label: 'Date'
-})
+const props = withDefaults(
+  defineProps<{
+    modelValue: Date | null | DateRange;
+    placeholder?: string;
+    dateFormat?: DateFormat;
+    firstDayOfWeek?: 0 | 1;
+    ariaLabel?: string;
+    ariaDescribedby?: string;
+    disabledDates: Date[];
+    class?: string;
+    label?: string;
+    isRange?: boolean;
+  }>(),
+  {
+    placeholder: "Select date",
+    dateFormat: "mm/dd/yyyy",
+    firstDayOfWeek: 0,
+    ariaLabel: "Date picker",
+    ariaDescribedby: "date-picker-description",
+    disabledDates: () => [],
+    label: "Date",
+    isRange: false,
+  }
+);
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', date: Date | null): void
-}>()
+  (e: "update:modelValue", date: Date | null | DateRange): void;
+}>();
 
-const inputRef = ref<InstanceType<typeof DatePickerInput> | null>(null)
-const isDarkMode = computed(() => props.class?.includes('dark'))
+const inputRef = ref<InstanceType<typeof DatePickerInput> | null>(null);
+const isDarkMode = computed(() => props.class?.includes("dark"));
 
 const {
   currentDate,
   selectedDate,
+  selectedRange,
   isOpen,
   inputValue,
   error,
@@ -85,30 +95,38 @@ const {
   validateInput,
   handlePreviousMonth,
   handleNextMonth,
-} = useDatePicker(props, emit)
+} = useDatePicker(props, emit);
 
 const handleClickOutside = (event: MouseEvent) => {
   const target = event.target as HTMLElement;
-  const isNavigationButton = target.closest('.calendar-navigation-button');
-  if (inputRef.value && !inputRef.value.$el.contains(event.target as Node) && !isNavigationButton) {
+  const isNavigationButton = target.closest(".calendar-navigation-button");
+  if (
+    inputRef.value &&
+    !inputRef.value.$el.contains(event.target as Node) &&
+    !isNavigationButton
+  ) {
     closeCalendar();
   }
 };
 
 const handleDateSelection = (dateObj: DateValue) => {
   selectDate(dateObj);
+  clearError();
 };
 
 const formatDateSafe = (date: Date | null, format: DateFormat): string => {
-  return date && date instanceof Date ? formatDate(date, format) : '';
+  return date && date instanceof Date ? formatDate(date, format) : "";
+};
+
+const clearError = () => {
+  error.value = "";
 };
 
 onMounted(() => {
-  document.addEventListener('click', handleClickOutside)
-})
+  document.addEventListener("click", handleClickOutside);
+});
 
 onUnmounted(() => {
-  document.removeEventListener('click', handleClickOutside)
-})
+  document.removeEventListener("click", handleClickOutside);
+});
 </script>
-

@@ -6,8 +6,13 @@ export interface DateValue {
 
 export type DateFormat = "mm/dd/yyyy" | "dd/mm/yyyy" | "yyyy/mm/dd"
 
+export interface DateRange {
+  start: Date | null
+  end: Date | null
+}
+
 export interface DatePickerProps {
-  modelValue: Date | null
+  modelValue: Date | null | DateRange
   placeholder?: string
   dateFormat?: DateFormat
   firstDayOfWeek?: 0 | 1
@@ -16,7 +21,8 @@ export interface DatePickerProps {
   disabledDates: Date[]
   class?: string
   label?: string
+  isRange?: boolean
 }
 
-export type DatePickerEmits = (e: "update:modelValue", date: Date | null) => void
+export type DatePickerEmits = (e: "update:modelValue", date: Date | null | DateRange) => void
 

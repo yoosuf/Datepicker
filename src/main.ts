@@ -1,5 +1,14 @@
-import { createApp } from 'vue'
-import './style.css'
-import App from './App.vue'
+import { App } from 'vue'
+import DatePicker from './components/DatePicker/DatePicker.vue'
 
-createApp(App).mount('#app')
+export { DatePicker }
+export * from './types/datePicker'
+export * from './utils/dateUtils'
+export * from './composables/useDatePicker'
+export * from './composables/useCalendarDays'
+
+export default {
+  install: (app: App) => {
+    app.component('DatePicker', DatePicker)
+  }
+}

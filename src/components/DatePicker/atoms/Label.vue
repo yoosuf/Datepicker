@@ -1,8 +1,5 @@
 <template>
-  <label
-    :for="forId"
-    class="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300"
-  >
+  <label :for="forId" class="block text-sm font-medium text-gray-700 mb-1">
     {{ text }}
   </label>
 </template>
@@ -13,3 +10,4 @@ defineProps<{
   text: string;
 }>();
 </script>
+

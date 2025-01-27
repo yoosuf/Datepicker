@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-white rounded-xl shadow-lg border border-gray-200 p-4 w-80 dark:bg-gray-800 dark:border-gray-700"
+    class="bg-white rounded-xl shadow-lg border border-gray-200 p-4 w-80"
     role="dialog"
     :aria-label="ariaLabel"
     :id="calendarId"
